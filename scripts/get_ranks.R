@@ -18,16 +18,10 @@ rank_scores <- function(df) {
 }
 
 uvm_ranks <- rank_scores(uvm_scores)
-write.table(uvm_ranks, "processed_data/uvm_ranks.tsv",
-            row.names = FALSE, col.names = TRUE,
-            sep = '\t', quote = FALSE)
+write_tsv(uvm_ranks, "processed_data/uvm_ranks.tsv")
 
 avana_sk_ranks <- rank_scores(avana_sk_scores)
-write.table(avana_sk_ranks, "processed_data/avana_sk_ranks.tsv",
-            row.names = FALSE, col.names = TRUE,
-            sep = '\t', quote = FALSE)
+write_tsv(avana_sk_ranks, "processed_data/avana_sk_ranks.tsv")
 
 avana_Nsk_ranks <- rank_scores(avana_Nsk_scores)
-write.table(avana_Nsk_ranks, "processed_data/avana_Nsk_ranks.tsv",
-            row.names = FALSE, col.names = TRUE,
-            sep = '\t', quote = FALSE)
+write_tsv(avana_Nsk_ranks, "processed_data/avana_Nsk_ranks.tsv")
