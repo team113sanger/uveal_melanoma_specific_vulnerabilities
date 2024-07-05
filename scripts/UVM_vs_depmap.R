@@ -223,8 +223,6 @@ ggplot(box_plot_data, aes(x = type, y = Rank, fill = type)) +
   scale_fill_manual(values = c("UVM" = "deepskyblue4", "SKCM" = "sandybrown"))
 
 # Volcano Plots 
--log10(p_value)
-
 volcano_plot_data <- uvm_vs_skcm_filtered %>%
   mutate(significant = case_when(
       Padj < 0.05 & abs(LFC) > 2 ~ ifelse(LFC > 0, "Upregulated", "Downregulated"),
