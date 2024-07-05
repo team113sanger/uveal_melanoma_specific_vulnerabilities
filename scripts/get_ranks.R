@@ -69,6 +69,6 @@ write.table(avana_sk_ranks, "processed_data/avana_sk_ranks.tsv",
             sep = '\t', quote = FALSE)
 
 avana_Nsk_ranks <- rank_scores(avana_Nsk_scores)
-write.table(avana_Nsk_ranks, "processed_data/avana_Nsk_ranks",
+write.table(avana_Nsk_ranks, "processed_data/avana_Nsk_ranks.tsv",
             row.names = FALSE, col.names = TRUE,
             sep = '\t', quote = FALSE)
