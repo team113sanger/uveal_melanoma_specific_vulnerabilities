@@ -10,10 +10,10 @@ uvm_scores <- read_tsv("processed_data/uvm_scores.tsv")
 
 # Get ranks
 rank_scores <- function(df) {
-  ranked_df <- cbind(df[, "genes"], apply(df[,-1], 2, rank)) %>%
-  as.data.frame() %>%
-  mutate(across(-genes, as.numeric))
-  
+  ranked_df <- cbind(df[, "genes"], apply(df[, -1], 2, rank)) %>%
+    as.data.frame() %>%
+    mutate(across(-genes, as.numeric))
+
   return(ranked_df)
 }
 
