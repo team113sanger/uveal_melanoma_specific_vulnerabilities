@@ -41,48 +41,44 @@ uvm_vs_skcm <- get_mann_whitney_results(ranked_uvm, ranked_avana_sk)
 # UVM vs Pan Cancer
 uvm_vs_pan_cancer <- get_mann_whitney_results(ranked_uvm, ranked_avana_Nsk)
 
-# 'LFC'...?
-get_median_ranks <- fuction() {
+# Add median ranks and calculate fold changes
+uvm_vs_skcm <- uvm_vs_skcm %>%
+  mutate(
+    uvm_median_rank = apply(ranked_uvm[, -1], 1, median),
+    sk_median_rank = apply(ranked_avana_sk[, -1], 1, median),
+    FC = sk_median_rank / uvm_median_rank,
+    LFC = log2(FC)
+  )
 
-}
-uvm_medians <- apply(ranked_uvm[, -1], 1, median)
-sk_medians <- apply(ranked_avana_sk[, -1], 1, median)
-nsk_medians <- apply(ranked_avana_nsk[, -1], 1, median)
+uvm_vs_pan_cancer <- uvm_vs_pan_cancer %>%
+  mutate(
+    uvm_median_rank = apply(ranked_uvm[, -1], 1, median),
+    Nsk_median_rank = apply(ranked_avana_Nsk[, -1], 1, median),
+    FC = Nsk_median_rank / uvm_median_rank,
+    LFC = log2(FC)
+  )
 
-uvm_vs_skcm$uvm_median_rank <- uvm_medians
-uvm_vs_skcm$sk_median_rank <- sk_medians
-uvm_vs_skcm$FC <- uvm_vs_skcm$sk_median_rank / uvm_vs_skcm$uvm_median_rank
-uvm_vs_skcm$LFC <- log2(uvm_vs_skcm$FC)
-
-uvm_vs_pan_cancer$uvm_median_rank <- uvm_medians
-uvm_vs_pan_cancer$nsk_median_rank <- nsk_medians
-uvm_vs_pan_cancer$FC <- uvm_vs_pan_cancer$nsk_median_rank / uvm_vs_pan_cancer$uvm_median_rank
-uvm_vs_pan_cancer$LFC <- log2(uvm_vs_skcm$FC)
-
-# Combine data
-uvm_vs_skcm <- merge(uvm_vs_skcm, merged_ess[, c("genes", "UVM", "SKCM")],
-  by = "genes"
-)
-uvm_vs_pan_cancer <- merge(uvm_vs_pan_cancer, merged_ess[, c("genes", "UVM", "Pan_cancer")],
-  by = "genes"
-)
-
-# Pan ess genes
-Log2FC_cutoff <- 1.5
-padj_cutoff <- 0.05
-
+# Filter out pan ess genes
 uvm_vs_skcm_filtered <- uvm_vs_skcm |>
   filter(!genes %in% pan_essential_genes[["Gene"]])
+write_tsv(uvm_vs_skcm_filtered, "processed_data/uvm_vs_skcm.tsv")
+
+uvm_vs_pan_cancer_filtered <- uvm_vs_pan_cancer |>
+  filter(!genes %in% pan_essential_genes[["Gene"]])
+write_tsv(uvm_vs_pan_cancer_filtered, "processed_data/uvm_vs_pan_cancer.tsv")
+
+# Filter for significant results
+Log2FC_cutoff <- 1.5
+padj_cutoff <- 0.05
 
 uvm_vs_skcm_filtered_sig <- uvm_vs_skcm_filtered |>
   filter(LFC > Log2FC_cutoff) |>
   filter(Padj < padj_cutoff) |>
   arrange(desc(LFC))
-
-uvm_vs_pan_cancer_filtered <- uvm_vs_pan_cancer |>
-  filter(!genes %in% pan_essential_genes[["Gene"]])
+write_tsv(uvm_vs_skcm_filtered_sig, "processed_data/uvm_vs_skcm_sig.tsv")
 
 uvm_vs_pan_cancer_filtered_sig <- uvm_vs_pan_cancer_filtered |>
   filter(LFC > Log2FC_cutoff) |>
   filter(Padj < padj_cutoff) |>
   arrange(desc(LFC))
+write_tsv(uvm_vs_pan_cancer_filtered_sig, "processed_data/uvm_vs_pan_cancer_sig.tsv")
