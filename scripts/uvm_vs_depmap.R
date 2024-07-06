@@ -1,5 +1,5 @@
 source("src/calculate_fold_change.R")
-source("src/boxplot.R")
+source("src/boxplots.R")
 source("src/volcano_plot.R")
 
 library(readr)
