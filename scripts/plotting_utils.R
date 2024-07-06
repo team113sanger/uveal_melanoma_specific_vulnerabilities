@@ -1,21 +1,9 @@
 library(dplyr)
-library(readr)
 library(tidyr)
 library(ggplot2)
 library(ggsignif)
+library(ggrepel)
 
-# Load data
-uvm_ranks <- read_tsv("processed_data/uvm_ranks.tsv")
-avana_sk_ranks <- read_tsv("processed_data/avana_sk_ranks.tsv")
-avana_Nsk_ranks <- read_tsv("processed_data/avana_Nsk_ranks.tsv")
-uvm_vs_skcm_sig <- read_tsv("processed_data/uvm_vs_skcm_sig.tsv")
-uvm_vs_pan_cancer_sig <- read_tsv("processed_data/uvm_vs_pan_cancer_sig.tsv")
-
-# Get top genes
-top_genes_sk <- head(uvm_vs_skcm_sig$genes, 10)
-top_genes_Nsk <- head(uvm_vs_pan_cancer_sig$genes, 10)
-
-#
 prepare_boxplot_data <- function(ranks_df, top_genes, label) {
   filtered_df <- ranks_df %>%
     filter(genes %in% top_genes)
@@ -31,12 +19,6 @@ prepare_boxplot_data <- function(ranks_df, top_genes, label) {
 
   return(df_long)
 }
-
-uvm_ranks_plot_data <- prepare_boxplot_data(uvm_ranks, top_genes_sk, "UVM")
-avana_sk_ranks_plot_data <- prepare_boxplot_data(avana_sk_ranks, top_genes_sk, "SKCM")
-
-uvm_ranks_plot_data_2 <- prepare_boxplot_data(uvm_ranks, top_genes_Nsk, "UVM")
-avana_Nsk_ranks_plot_data <- prepare_boxplot_data(avana_Nsk_ranks, top_genes_Nsk, "Pan_cancer")
 
 plot_boxplot <- function(data_a, data_b, label_a, label_b) {
   plot_data <- bind_rows(data_a, data_b)
@@ -72,23 +54,6 @@ plot_boxplot <- function(data_a, data_b, label_a, label_b) {
     scale_fill_manual(values = fill_colors)
 }
 
-uvm_vs_skcm_p <- plot_boxplot(
-  uvm_ranks_plot_data, avana_sk_ranks_plot_data,
-  "UVM", "SKCM"
-)
-ggsave("plots/uvm_vs_skcm_boxplot.pdf", uvm_vs_skcm_p,
-  width = 8, height = 5
-)
-
-uvm_vs_pan_p <- plot_boxplot(
-  uvm_ranks_plot_data_2, avana_Nsk_ranks_plot_data,
-  "UVM", "Pan_cancer"
-)
-ggsave("plots/uvm_vs_pan_cancer_boxplot.pdf", uvm_vs_pan_p,
-  width = 8, height = 5
-)
-
-# with stats
 plot_stats_boxplots <- function(data_a, data_b, label_a, label_b) {
   plot_data <- bind_rows(data_a, data_b)
 
@@ -126,18 +91,33 @@ plot_stats_boxplots <- function(data_a, data_b, label_a, label_b) {
     scale_fill_manual(values = fill_colors)
 }
 
-uvm_vs_skcm_p <- plot_stats_boxplots(
-  uvm_ranks_plot_data, avana_sk_ranks_plot_data,
-  "UVM", "SKCM"
-)
-ggsave("plots/uvm_vs_skcm_stats_boxplot.pdf", uvm_vs_skcm_p,
-  width = 10, height = 7
-)
+# Label significant genes
+prepare_volcano_data <- function(df) {
+  plot_data <- df %>%
+    mutate(significant = case_when(
+      Padj < 0.05 & abs(LFC) > 2 ~ ifelse(LFC > 0, "Upregulated", "Downregulated"),
+      TRUE ~ "Not Significant"
+    ))
+}
 
-uvm_vs_pan_p <- plot_stats_boxplots(
-  uvm_ranks_plot_data_2, avana_Nsk_ranks_plot_data,
-  "UVM", "Pan_cancer"
-)
-ggsave("plots/uvm_vs_pan_cancer_stats_boxplot.pdf", uvm_vs_pan_p,
-  width = 10, height = 7
-)
+plot_volcano <- function(df) {
+  top_genes <- df %>%
+    filter(significant != "Not Significant") %>%
+    top_n(10, abs(LFC))
+
+  ggplot(df, aes(x = LFC, y = -log10(Padj), color = significant)) +
+  geom_point(alpha = 0.7) +
+  scale_color_manual(
+    values = c(
+      "Not Significant" = "gray", "Upregulated" = "indianred3", "Downregulated" = "royalblue3"
+      ),
+    guide = "none"
+  ) +
+  geom_hline(yintercept = -log10(0.05), linetype = "dashed", color = "black", alpha = 0.5) +
+  geom_vline(xintercept = c(-2, 2), linetype = "dashed", color = "black", alpha = 0.5) +
+  geom_text_repel(
+    data = top_genes, aes(label = genes), size = 3,
+           box.padding = unit(0.35, "lines"), point.padding = unit(0.3, "lines")) +
+  labs(x = "Log2(Fold Change)", y = "-Log10(Padj)") +
+  theme_bw()
+}
