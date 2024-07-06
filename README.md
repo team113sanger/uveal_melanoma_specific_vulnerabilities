@@ -11,7 +11,7 @@ Raw data are stored in "data":
 - "pan_genes.csv": list of pan essential genes from ...?
 
 ## Analyses
-The analysis scripts are in "scripts", which call functions in "src".
+The analysis scripts are in "scripts", which call functions in "src".  
 (Ignore "converted_notebook.R"!)
 
 ### Data Processing
