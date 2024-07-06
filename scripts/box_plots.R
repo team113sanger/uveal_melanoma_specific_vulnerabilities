@@ -46,7 +46,7 @@ plot_boxplot <- function(data_a, data_b, label_a, label_b) {
 
   fill_colors <- setNames(
     c("deepskyblue4", "sandybrown"), c(label_a, label_b)
-    )
+  )
 
   ggplot(plot_data, aes(x = genes, y = rank, fill = type)) +
     geom_boxplot(notch = FALSE) +
@@ -72,14 +72,18 @@ plot_boxplot <- function(data_a, data_b, label_a, label_b) {
     scale_fill_manual(values = fill_colors)
 }
 
-uvm_vs_skcm_p <- plot_boxplot(uvm_ranks_plot_data, avana_sk_ranks_plot_data,
-                              "UVM", "SKCM")
+uvm_vs_skcm_p <- plot_boxplot(
+  uvm_ranks_plot_data, avana_sk_ranks_plot_data,
+  "UVM", "SKCM"
+)
 ggsave("plots/uvm_vs_skcm_boxplot.pdf", uvm_vs_skcm_p,
   width = 8, height = 5
 )
 
-uvm_vs_pan_p <- plot_boxplot(uvm_ranks_plot_data_2, avana_Nsk_ranks_plot_data,
-                              "UVM", "Pan_cancer")
+uvm_vs_pan_p <- plot_boxplot(
+  uvm_ranks_plot_data_2, avana_Nsk_ranks_plot_data,
+  "UVM", "Pan_cancer"
+)
 ggsave("plots/uvm_vs_pan_cancer_boxplot.pdf", uvm_vs_pan_p,
   width = 8, height = 5
 )
@@ -93,7 +97,7 @@ plot_stats_boxplots <- function(data_a, data_b, label_a, label_b) {
 
   fill_colors <- setNames(
     c("deepskyblue4", "sandybrown"), c(label_a, label_b)
-    )
+  )
 
   ggplot(plot_data, aes(x = type, y = rank, fill = type)) +
     geom_boxplot(notch = FALSE) +
@@ -122,14 +126,18 @@ plot_stats_boxplots <- function(data_a, data_b, label_a, label_b) {
     scale_fill_manual(values = fill_colors)
 }
 
-uvm_vs_skcm_p <- plot_stats_boxplots(uvm_ranks_plot_data, avana_sk_ranks_plot_data,
-                                    "UVM", "SKCM")
+uvm_vs_skcm_p <- plot_stats_boxplots(
+  uvm_ranks_plot_data, avana_sk_ranks_plot_data,
+  "UVM", "SKCM"
+)
 ggsave("plots/uvm_vs_skcm_stats_boxplot.pdf", uvm_vs_skcm_p,
   width = 10, height = 7
 )
 
-uvm_vs_pan_p <- plot_stats_boxplots(uvm_ranks_plot_data_2, avana_Nsk_ranks_plot_data,
-                                    "UVM", "Pan_cancer")
+uvm_vs_pan_p <- plot_stats_boxplots(
+  uvm_ranks_plot_data_2, avana_Nsk_ranks_plot_data,
+  "UVM", "Pan_cancer"
+)
 ggsave("plots/uvm_vs_pan_cancer_stats_boxplot.pdf", uvm_vs_pan_p,
   width = 10, height = 7
 )
