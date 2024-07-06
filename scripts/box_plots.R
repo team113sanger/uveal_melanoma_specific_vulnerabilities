@@ -1,72 +1,118 @@
-# Box plots
-top_genes <- head(uvm_vs_skcm_filtered_sig$genes, 10)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(ggsignif)
 
-ranked_uvm_filtered <- ranked_uvm %>%
-  filter(genes %in% top_genes)
+# Load data 
+uvm_ranks <- read_tsv("processed_data/uvm_ranks.tsv")
+avana_sk_ranks <- read_tsv("processed_data/avana_sk_ranks.tsv")
+avana_Nsk_ranks <- read_tsv("processed_data/avana_Nsk_ranks.tsv")
+uvm_vs_skcm_sig <- read_tsv("processed_data/uvm_vs_skcm_sig.tsv")
+uvm_vs_pan_cancer_sig <- read_tsv("processed_data/uvm_vs_pan_cancer_sig.tsv")
 
-ranked_avana_sk_filtered <- ranked_avana_sk %>%
-  filter(genes %in% top_genes)
+# Get top genes
+top_genes_sk <- head(uvm_vs_skcm_filtered_sig$genes, 10)
+top_genes_Nsk <- head(uvm_vs_pan_cancer_sig$genes, 10)
 
-ranked_uvm_long <- ranked_uvm_filtered %>%
-  pivot_longer(cols = -genes, names_to = "cell_line", values_to = "Rank") %>%
-  mutate(type = "UVM")
+#
+prepare_boxplot_data <- function(ranks_df, top_genes, label) {
+    filtered_df <- ranks_df %>%
+        filter(genes %in% top_genes)
 
-ranked_avana_sk_long <- ranked_avana_sk_filtered %>%
-  pivot_longer(cols = -genes, names_to = "cell_line", values_to = "Rank") %>%
-  mutate(type = "SKCM")
+    df_long <- filtered_df %>%
+        pivot_longer(
+            cols = -genes, names_to = "cell_line", values_to = "rank"
+            ) %>%
+        mutate(type = label)
 
-box_plot_data <- bind_rows(ranked_uvm_long, ranked_avana_sk_long)
-box_plot_data[["genes"]] <-
-  factor(box_plot_data[["genes"]], levels = top_genes)
-box_plot_data[["type"]] <-
-  factor(box_plot_data[["type"]], levels = c("UVM", "SKCM"))
+    df_long[["genes"]] <-
+        factor(df_long[["genes"]], levels = top_genes)
 
-ggplot(box_plot_data, aes(x = genes, y = Rank, fill = type)) +
-  geom_boxplot(notch = FALSE) +
-  # scale_y_continuous(trans = 'log10') +
-  theme_classic() +
-  scale_x_discrete(guide = guide_axis(angle = 90)) +
-  #  scale_y_continuous(expand = c(0, 0)) +
-  theme(
-    axis.text.x = element_text(size = 10),
-    axis.ticks.x = element_blank(),
-    axis.title.x = element_blank(),
-    axis.title.y = element_text(size = 14),
-    plot.title = element_text(size = 16),
-    legend.title = element_blank(),
-    legend.justification = c("right", "top"),
-    legend.position = c(.95, 1.1),
-    panel.grid.major.y = element_line()
-  ) +
-  labs(
-    title = "Top 10 UVM-specific Gene Vulnerabilities",
-    y = "Rank"
-  ) +
-  scale_fill_manual(values = c("UVM" = "deepskyblue4", "SKCM" = "sandybrown"))
+    return(df_long)
+}
+
+uvm_ranks_plot_data <- prepare_boxplot_data(uvm_ranks, top_genes_sk, "UVM")
+avana_sk_ranks_plot_data <- prepare_boxplot_data(avana_sk_ranks, top_genes_sk, "SKCM")
+
+uvm_ranks_plot_data_2 <- prepare_boxplot_data(uvm_ranks, top_genes_Nsk, "UVM")
+avana_Nsk_ranks_plot_data <- prepare_boxplot_data(avana_Nsk_ranks, top_genes_Nsk, "Pan Cancer")
+
+plot_boxplot <- function(data_a, data_b) {
+    plot_data <- bind_rows(data_a, data_b)
+
+    plot_data[["type"]] <-
+        factor(plot_data[["type"]], levels = c("UVM", "SKCM"))
+
+    ggplot(plot_data, aes(x = genes, y = rank, fill = type)) +
+        geom_boxplot(notch = FALSE) +
+        # scale_y_continuous(trans = 'log10') +
+        theme_classic() +
+        scale_x_discrete(guide = guide_axis(angle = 90)) +
+        #  scale_y_continuous(expand = c(0, 0)) +
+        theme(
+            axis.text.x = element_text(size = 10),
+            axis.ticks.x = element_blank(),
+            axis.title.x = element_blank(),
+            axis.title.y = element_text(size = 14),
+            plot.title = element_text(size = 16),
+            legend.title = element_blank(),
+            legend.justification = c("right", "top"),
+            legend.position.inside = c(.95, 1.1),
+            panel.grid.major.y = element_line()
+        ) +
+        labs(
+            title = "Top 10 UVM-specific Gene Vulnerabilities",
+            y = "Rank"
+        ) +
+        scale_fill_manual(values = c("UVM" = "deepskyblue4", "SKCM" = "sandybrown"))
+}
+
+uvm_vs_skcm_p <- plot_boxplot(uvm_ranks_plot_data, avana_sk_ranks_plot_data)
+ggsave("plots/uvm_vs_skcm_boxplot.pdf", uvm_vs_skcm_p,
+        width = 8, height = 5)
+
+uvm_vs_pan_p <- plot_boxplot(uvm_ranks_plot_data_2, avana_Nsk_ranks_plot_data)
+ggsave("plots/uvm_vs_pan_cancer_boxplot.pdf", uvm_vs_pan_p,
+        width = 8, height = 5)
 
 # with stats
-ggplot(box_plot_data, aes(x = type, y = Rank, fill = type)) +
-  geom_boxplot(notch = FALSE) +
-  geom_signif(
-    comparisons = list(c("UVM", "SKCM")),
-    map_signif_level = TRUE,
-    test = "wilcox.test"
-  ) +
-  facet_wrap(~genes, scales = "free") +
-  coord_cartesian(ylim = c(0, max(box_plot_data$Rank) * 1.15)) +
-  theme_classic() +
-  theme(
-    axis.text.x = element_text(size = 10),
-    axis.ticks.x = element_blank(),
-    axis.title.x = element_blank(),
-    axis.title.y = element_text(size = 14),
-    plot.title = element_text(size = 16),
-    legend.title = element_blank(),
-    legend.position = "none",
-    panel.grid.major.y = element_line()
-  ) +
-  labs(
-    title = "Top 10 UVM-specific Gene Vulnerabilities",
-    y = "Rank"
-  ) +
-  scale_fill_manual(values = c("UVM" = "deepskyblue4", "SKCM" = "sandybrown"))
+plot_stats_boxplots <- function(data_a, data_b) {
+    plot_data <- bind_rows(data_a, data_b)
+
+    plot_data[["type"]] <-
+        factor(plot_data[["type"]], levels = c("UVM", "SKCM"))
+
+    ggplot(plot_data, aes(x = type, y = rank, fill = type)) +
+        geom_boxplot(notch = FALSE) +
+        geom_signif(
+            comparisons = list(c("UVM", "SKCM")),
+            map_signif_level = TRUE,
+            test = "wilcox.test"
+        ) +
+        facet_wrap(~genes, scales = "free") +
+        coord_cartesian(ylim = c(0, max(plot_data[["rank"]]) * 1.15)) +
+        theme_classic() +
+        theme(
+            axis.text.x = element_text(size = 10),
+            axis.ticks.x = element_blank(),
+            axis.title.x = element_blank(),
+            axis.title.y = element_text(size = 14),
+            plot.title = element_text(size = 16),
+            legend.title = element_blank(),
+            legend.position = "none",
+            panel.grid.major.y = element_line()
+        ) +
+        labs(
+            title = "Top 10 UVM-specific Gene Vulnerabilities",
+            y = "Rank"
+        ) +
+        scale_fill_manual(values = c("UVM" = "deepskyblue4", "SKCM" = "sandybrown"))
+}
+
+uvm_vs_skcm_p <- plot_stats_boxplots(uvm_ranks_plot_data, avana_sk_ranks_plot_data)
+ggsave("plots/uvm_vs_skcm_stats_boxplot.pdf", uvm_vs_skcm_p,
+        width = 10, height = 7)
+
+uvm_vs_pan_p <- plot_stats_boxplots(uvm_ranks_plot_data_2, avana_Nsk_ranks_plot_data)
+ggsave("plots/uvm_vs_pan_cancer_stats_boxplot.pdf", uvm_vs_pan_p,
+        width = 10, height = 7)
