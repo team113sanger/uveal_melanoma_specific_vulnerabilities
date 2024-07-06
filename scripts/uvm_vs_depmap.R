@@ -1,5 +1,6 @@
-source("scripts/plotting_utils.R")
-source("scripts/analysis_utils.R")
+source("src/data_processing.R")
+source("src/boxplot.R")
+source("src/volcano_plot.R")
 
 library(readr)
 
@@ -12,7 +13,7 @@ avana_Nsk_scores <- read_tsv("processed_data/avana_Nsk_scores.tsv")
 uvm_scores <- read_tsv("processed_data/uvm_scores.tsv")
 
 # Load other
-pan_essential_genes <- read_csv("raw_data/pan_genes.csv")
+pan_essential_genes <- read_csv("data/pan_genes.csv")
 
 #### Get ranked data ####
 uvm_ranks <- rank_scores(uvm_scores)

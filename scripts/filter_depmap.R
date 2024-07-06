@@ -2,10 +2,10 @@ library(dplyr)
 library(readr)
 
 # Load depmap data
-anno <- read.table("raw_data/annotation.tsv", sep = " ", header = TRUE) %>%
+anno <- read.table("data/annotation.tsv", sep = " ", header = TRUE) %>%
   select("DepMap_ID", "primary_disease")
 
-avana <- read.table("raw_data/avana.tsv",
+avana <- read.table("data/avana.tsv",
   sep = " ",
   header = TRUE
 )
@@ -13,7 +13,7 @@ colnames(avana) <- gsub("\\.", "-", colnames(avana))
 avana <- na.omit(avana)
 
 # Load UVM data
-uvm_beta_scores <- read_tsv("raw_data/MAGeCK_gene_corrected_beta.tsv")
+uvm_beta_scores <- read_tsv("data/MAGeCK_gene_corrected_beta.tsv")
 
 # Tally depmap cancer types
 primary_disease_counts <- table(anno$primary_disease)
