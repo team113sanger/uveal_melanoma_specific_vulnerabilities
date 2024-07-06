@@ -12,6 +12,8 @@ Raw data are stored in "data":
 
 ## Analyses
 The analysis scripts are in "scripts", which call functions in "src".
+(Ignore "converted_notebook.R"!)
+
 ### Data Processing
 Processed data are stored in "processed_data".
 
