@@ -53,21 +53,21 @@ uvm_vs_pan_cancer_filtered <- filter_fc_results(
 )
 write_tsv(uvm_vs_pan_cancer_filtered, "processed_data/uvm_vs_pan_cancer.tsv")
 
-# Filter out pan essentials and select only significant genes
+# Filter out pan essentials and select only significant UVM specific genes
 uvm_vs_skcm_filtered_sig <- filter_fc_results(
-  uvm_vs_skcm_filtered, pan_essential_genes,
+  uvm_vs_skcm, pan_essential_genes,
   signifcant_only = TRUE
 )
 write_tsv(uvm_vs_skcm_filtered_sig, "processed_data/uvm_vs_skcm_sig.tsv")
 
 uvm_vs_pan_cancer_filtered_sig <- filter_fc_results(
-  uvm_vs_pan_cancer_filtered, pan_essential_genes,
+  uvm_vs_pan_cancer, pan_essential_genes,
   signifcant_only = TRUE
 )
 write_tsv(uvm_vs_pan_cancer_filtered_sig, "processed_data/uvm_vs_pan_cancer_sig.tsv")
 
 #### Box plots ####
-# Get top genes
+# Get top 10 UVM specific genes
 top_genes_sk <- head(uvm_vs_skcm_filtered_sig$genes, 10)
 top_genes_Nsk <- head(uvm_vs_pan_cancer_filtered_sig$genes, 10)
 
@@ -111,12 +111,12 @@ ggsave("plots/uvm_vs_pan_cancer_stats_boxplot.pdf", uvm_vs_pan_p,
 
 #### Volcano Plots ####
 # Create plots
-uvm_vs_skcm_p <- plot_volcano(prepare_volcano_data(uvm_vs_skcm))
+uvm_vs_skcm_p <- plot_volcano(prepare_volcano_data(uvm_vs_skcm_filtered))
 ggsave("plots/uvm_vs_skcm_volcano.pdf", uvm_vs_skcm_p,
   width = 9, height = 5
 )
 
-uvm_vs_pan_cancer_p <- plot_volcano(prepare_volcano_data(uvm_vs_pan_cancer))
+uvm_vs_pan_cancer_p <- plot_volcano(prepare_volcano_data(uvm_vs_pan_cancer_filtered))
 ggsave("plots/uvm_vs_pan_cancer_volcano.pdf", uvm_vs_pan_cancer_p,
   width = 9, height = 5
 )

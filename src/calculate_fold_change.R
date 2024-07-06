@@ -31,8 +31,8 @@ get_mann_whitney_results <- function(ranks_df, ranks_df_2) {
   return(df)
 }
 
-calculate_fold_change <- function(df, ranks_df, ranks_df_2) {
-  new_df <- df %>%
+calculate_fold_change <- function(stats_df, ranks_df, ranks_df_2) {
+  new_df <- stats_df %>%
     mutate(
       median_rank_a = apply(ranks_df[, -1], 1, median),
       median_rank_b = apply(ranks_df_2[, -1], 1, median),

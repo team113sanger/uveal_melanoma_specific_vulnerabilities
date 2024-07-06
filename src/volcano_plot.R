@@ -14,7 +14,8 @@ prepare_volcano_data <- function(df) {
 plot_volcano <- function(df) {
   top_genes <- df %>%
     filter(significant != "Not Significant") %>%
-    top_n(10, abs(LFC))
+    arrange(desc(abs(LFC))) %>%
+    head(10, abs(LFC))
 
   ggplot(df, aes(x = LFC, y = -log10(Padj), color = significant)) +
     geom_point(alpha = 0.7) +

@@ -42,14 +42,19 @@ avana_Nsk <- filter_avana_by_cancer_type(avana, anno, non_skin_cancer_lines)
 # Select only common genes in UVM data and depmap
 common_genes <- intersect(uvm_beta_scores$genes, avana$genes)
 
-avana_sk_scores <- avana_sk %>%
-  filter(genes %in% common_genes)
+filter_genes <- function(df, genes_to_keep) {
+  filtered_df <- df %>%
+    filter(genes %in% genes_to_keep) %>%
+    arrange(genes)
+
+  return(filtered_df)
+}
+
+avana_sk_scores <- filter_genes(avana_sk, common_genes)
 write_tsv(avana_sk_scores, "processed_data/avana_sk_scores.tsv")
 
-avana_Nsk_scores <- avana_Nsk %>%
-  filter(genes %in% common_genes)
+avana_Nsk_scores <- filter_genes(avana_Nsk, common_genes) 
 write_tsv(avana_Nsk_scores, "processed_data/avana_Nsk_scores.tsv")
 
-uvm_scores <- uvm_beta_scores %>%
-  filter(genes %in% common_genes)
+uvm_scores <- filter_genes(uvm_beta_scores, common_genes) 
 write_tsv(uvm_scores, "processed_data/uvm_scores.tsv")
