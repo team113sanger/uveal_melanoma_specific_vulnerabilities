@@ -19,7 +19,8 @@ Processed data are stored in "processed_data".
 - Divides DepMap data into two groups: "SKCM" and "Pan-cancer"
 - Filters DepMap and UVM data for only common genes
 
-### Calculate fold changes and plot
+### Calculate Fold Changes and Plotting
+Results tables are in "processed_data".
 Output plots are in "plots".
 
 "uvm_vs_depmap.R":
