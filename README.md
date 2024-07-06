@@ -1,23 +1,30 @@
 # UVM_CRISPR_DepMap_Analysis
 
 ## Description
-Analysis to compare MAGeCK beta scores of our in-house Uveal Melanoma CRISPR screen with DepMap
+Analyses to compare MAGeCK beta scores of our in-house Uveal Melanoma (UVM) CRISPR screen with DepMap data.
 
 ## Data
-Raw data is stored in "data"
-- annotation.tsv - downloaded annotations from DepMap
-- avana.tsv - MAGeCK beta scroes of avana data from DepMap
-- MAGeCK_gene_corrected_beta.tsv - MAGeCK beta scores of UVM screen
-- pan_genes.csv - list of pan essential genes from ...?
+Raw data are stored in "data":
+- "annotation.tsv": Downloaded annotations from DepMap
+- "avana.tsv": MAGeCK beta scroes of AVANA data from DepMap
+- "MAGeCK_gene_corrected_beta.tsv": MAGeCK beta scores from the UVM screen
+- "pan_genes.csv": list of pan essential genes from ...?
 
 ## Analyses
-The scripts for analyses are in "scripts", which call functions in "src"
+The analysis scripts are in "scripts", which call functions in "src".
 ### Data Processing
-Processed data is stored in "processed_data"
-- "scripts/filter_depmap.R"
+Processed data are stored in "processed_data".
 
-### Plotting
-Output plots are in "plots"
-- "src/boxplot.R" 
-- "src/volcano_plot.R"
+"filter_depmap.R":
+- Divides DepMap data into two groups: "SKCM" and "Pan-cancer"
+- Selects only common genes
+
+### Calculate fold changes and plot
+Output plots are in "plots".
+
+"uvm_vs_depmap.R":
+- Ranks the beta scores in UVM, SKCM and Pan-cancer groups
+- Calculates fold changes for 'UVM vs SKCM' and 'UVM vs Pan-cancer'
+- Plots boxplots of ranks for the top 10 significant genes
+- Plots volcano plots of fold changes, highlighting significant genes
 

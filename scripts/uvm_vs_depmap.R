@@ -1,4 +1,4 @@
-source("src/data_processing.R")
+source("src/calculate_fold_change.R")
 source("src/boxplot.R")
 source("src/volcano_plot.R")
 
