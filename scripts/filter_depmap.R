@@ -2,10 +2,13 @@ library(dplyr)
 library(readr)
 
 # Load depmap data
-anno <- read.table("data/annotation.tsv", sep = " ", header = TRUE) %>%
-  select("DepMap_ID", "primary_disease")
+anno <- read.table(
+  "data/annotation.tsv", sep = " ", header = TRUE
+) %>%
+  select(DepMap_ID, primary_disease)
 
-avana <- read.table("data/avana.tsv",
+avana <- read.table(
+  "data/avana.tsv",
   sep = " ",
   header = TRUE
 )
@@ -16,7 +19,7 @@ avana <- na.omit(avana)
 uvm_beta_scores <- read_tsv("data/MAGeCK_gene_corrected_beta.tsv")
 
 # Tally depmap cancer types
-primary_disease_counts <- table(anno$primary_disease)
+primary_disease_counts <- table(anno[["primary_disease"]])
 primary_disease_counts
 
 # Divide avana data into SKCM and Pan-cancer
@@ -37,10 +40,11 @@ non_skin_cancer_lines <- anno %>%
   filter(!primary_disease %in% c("Skin Cancer", "Unknown", "Non-Cancerous")) %>%
   distinct(primary_disease) %>%
   pull(primary_disease)
+
 avana_Nsk <- filter_avana_by_cancer_type(avana, anno, non_skin_cancer_lines)
 
 # Select only common genes in UVM data and depmap
-common_genes <- intersect(uvm_beta_scores$genes, avana$genes)
+common_genes <- intersect(uvm_beta_scores[["genes"]], avana[["genes"]])
 
 filter_genes <- function(df, genes_to_keep) {
   filtered_df <- df %>%
