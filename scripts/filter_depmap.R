@@ -53,8 +53,8 @@ filter_genes <- function(df, genes_to_keep) {
 avana_sk_scores <- filter_genes(avana_sk, common_genes)
 write_tsv(avana_sk_scores, "processed_data/avana_sk_scores.tsv")
 
-avana_Nsk_scores <- filter_genes(avana_Nsk, common_genes) 
+avana_Nsk_scores <- filter_genes(avana_Nsk, common_genes)
 write_tsv(avana_Nsk_scores, "processed_data/avana_Nsk_scores.tsv")
 
-uvm_scores <- filter_genes(uvm_beta_scores, common_genes) 
+uvm_scores <- filter_genes(uvm_beta_scores, common_genes)
 write_tsv(uvm_scores, "processed_data/uvm_scores.tsv")

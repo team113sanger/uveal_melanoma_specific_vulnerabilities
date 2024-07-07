@@ -6,7 +6,7 @@ label_significant_genes <- function(df) {
   plot_data <- df %>%
     mutate(
       significant = case_when(
-        Padj < 0.05 & abs(LFC) > 2 ~ 
+        Padj < 0.05 & abs(LFC) > 2 ~
           ifelse(LFC > 0, "Upregulated", "Downregulated"),
         TRUE ~ "Not Significant"
       )
@@ -28,10 +28,14 @@ plot_volcano <- function(df) {
       ),
       guide = "none"
     ) +
-    geom_hline(yintercept = -log10(0.05), linetype = "dashed",
-               color = "black", alpha = 0.5) +
-    geom_vline(xintercept = c(-2, 2), linetype = "dashed",
-               color = "black", alpha = 0.5) +
+    geom_hline(
+      yintercept = -log10(0.05), linetype = "dashed",
+      color = "black", alpha = 0.5
+    ) +
+    geom_vline(
+      xintercept = c(-2, 2), linetype = "dashed",
+      color = "black", alpha = 0.5
+    ) +
     geom_text_repel(
       data = top_genes, aes(label = genes), size = 3,
       box.padding = unit(0.35, "lines"), point.padding = unit(0.3, "lines")
