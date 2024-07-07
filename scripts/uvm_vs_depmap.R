@@ -70,8 +70,8 @@ write_tsv(
 
 #### Box plots ####
 # Get top 10 UVM specific genes
-top_genes_sk <- head(uvm_vs_skcm_filtered_sig$genes, 10)
-top_genes_Nsk <- head(uvm_vs_pan_cancer_filtered_sig$genes, 10)
+top_genes_sk <- head(uvm_vs_skcm_filtered_sig[["genes"]], 10)
+top_genes_Nsk <- head(uvm_vs_pan_cancer_filtered_sig[["genes"]], 10)
 
 # Create plots
 uvm_vs_skcm_p <- plot_boxplot(
