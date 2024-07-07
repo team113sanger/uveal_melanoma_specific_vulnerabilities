@@ -19,17 +19,17 @@ prepare_boxplot_data <- function(ranks_df, top_genes, label) {
   return(df_long)
 }
 
-plot_boxplot <- function(data_a, data_b, label_a, label_b) {
-  plot_data <- bind_rows(data_a, data_b)
+plot_boxplot <- function(df_a, df_b, label_a, label_b) {
+  plot_df <- bind_rows(df_a, df_b)
 
-  plot_data[["type"]] <-
-    factor(plot_data[["type"]], levels = c(label_a, label_b))
+  plot_df[["type"]] <-
+    factor(plot_df[["type"]], levels = c(label_a, label_b))
 
   fill_colors <- setNames(
     c("deepskyblue4", "sandybrown"), c(label_a, label_b)
   )
 
-  ggplot(plot_data, aes(x = genes, y = rank, fill = type)) +
+  ggplot(plot_df, aes(x = genes, y = rank, fill = type)) +
     geom_boxplot(notch = FALSE) +
     # scale_y_continuous(trans = 'log10') +
     theme_classic() +
@@ -53,17 +53,17 @@ plot_boxplot <- function(data_a, data_b, label_a, label_b) {
     scale_fill_manual(values = fill_colors)
 }
 
-plot_stats_boxplots <- function(data_a, data_b, label_a, label_b) {
-  plot_data <- bind_rows(data_a, data_b)
+plot_stats_boxplots <- function(df_a, df_b, label_a, label_b) {
+  plot_df <- bind_rows(df_a, df_b)
 
-  plot_data[["type"]] <-
-    factor(plot_data[["type"]], levels = c(label_a, label_b))
+  plot_df[["type"]] <-
+    factor(plot_df[["type"]], levels = c(label_a, label_b))
 
   fill_colors <- setNames(
     c("deepskyblue4", "sandybrown"), c(label_a, label_b)
   )
 
-  ggplot(plot_data, aes(x = type, y = rank, fill = type)) +
+  ggplot(plot_df, aes(x = type, y = rank, fill = type)) +
     geom_boxplot(notch = FALSE) +
     geom_signif(
       comparisons = list(c(label_a, label_b)),
@@ -71,7 +71,7 @@ plot_stats_boxplots <- function(data_a, data_b, label_a, label_b) {
       test = "wilcox.test"
     ) +
     facet_wrap(~genes, scales = "free") +
-    coord_cartesian(ylim = c(0, max(plot_data[["rank"]]) * 1.15)) +
+    coord_cartesian(ylim = c(0, max(plot_df[["rank"]]) * 1.15)) +
     theme_classic() +
     theme(
       axis.text.x = element_text(size = 10),
