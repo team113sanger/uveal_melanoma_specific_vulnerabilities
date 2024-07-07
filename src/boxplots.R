@@ -47,7 +47,7 @@ plot_boxplot <- function(data_a, data_b, label_a, label_b) {
       panel.grid.major.y = element_line()
     ) +
     labs(
-      title = "Top 10 UVM-specific Gene Vulnerabilities",
+      title = paste0("Top 10 ", label_a, "-specific Gene Vulnerabilities"),
       y = "Rank"
     ) +
     scale_fill_manual(values = fill_colors)
@@ -84,7 +84,7 @@ plot_stats_boxplots <- function(data_a, data_b, label_a, label_b) {
       panel.grid.major.y = element_line()
     ) +
     labs(
-      title = "Top 10 UVM-specific Gene Vulnerabilities",
+      title = paste0("Top 10 ", label_a, "-specific Gene Vulnerabilities"),
       y = "Rank"
     ) +
     scale_fill_manual(values = fill_colors)
