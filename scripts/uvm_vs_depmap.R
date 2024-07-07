@@ -64,7 +64,9 @@ uvm_vs_pan_cancer_filtered_sig <- filter_fc_results(
   uvm_vs_pan_cancer, pan_essential_genes,
   signifcant_only = TRUE
 )
-write_tsv(uvm_vs_pan_cancer_filtered_sig, "processed_data/uvm_vs_pan_cancer_sig.tsv")
+write_tsv(
+  uvm_vs_pan_cancer_filtered_sig, "processed_data/uvm_vs_pan_cancer_sig.tsv"
+)
 
 #### Box plots ####
 # Get top 10 UVM specific genes
@@ -77,7 +79,8 @@ uvm_vs_skcm_p <- plot_boxplot(
   prepare_boxplot_data(avana_sk_ranks, top_genes_sk, "SKCM"),
   "UVM", "SKCM"
 )
-ggsave("plots/uvm_vs_skcm_boxplot.pdf", uvm_vs_skcm_p,
+ggsave(
+  "plots/uvm_vs_skcm_boxplot.pdf", uvm_vs_skcm_p,
   width = 9, height = 5
 )
 
@@ -86,7 +89,8 @@ uvm_vs_pan_p <- plot_boxplot(
   prepare_boxplot_data(avana_Nsk_ranks, top_genes_Nsk, "Pan_cancer"),
   "UVM", "Pan_cancer"
 )
-ggsave("plots/uvm_vs_pan_cancer_boxplot.pdf", uvm_vs_pan_p,
+ggsave(
+  "plots/uvm_vs_pan_cancer_boxplot.pdf", uvm_vs_pan_p,
   width = 9, height = 5
 )
 
@@ -96,7 +100,8 @@ uvm_vs_skcm_p <- plot_stats_boxplots(
   prepare_boxplot_data(avana_sk_ranks, top_genes_sk, "SKCM"),
   "UVM", "SKCM"
 )
-ggsave("plots/uvm_vs_skcm_stats_boxplot.pdf", uvm_vs_skcm_p,
+ggsave(
+  "plots/uvm_vs_skcm_stats_boxplot.pdf", uvm_vs_skcm_p,
   width = 10, height = 8
 )
 
@@ -105,18 +110,25 @@ uvm_vs_pan_p <- plot_stats_boxplots(
   prepare_boxplot_data(avana_Nsk_ranks, top_genes_Nsk, "Pan_cancer"),
   "UVM", "Pan_cancer"
 )
-ggsave("plots/uvm_vs_pan_cancer_stats_boxplot.pdf", uvm_vs_pan_p,
+ggsave(
+  "plots/uvm_vs_pan_cancer_stats_boxplot.pdf", uvm_vs_pan_p,
   width = 10, height = 8
 )
 
 #### Volcano Plots ####
 # Create plots
-uvm_vs_skcm_p <- plot_volcano(prepare_volcano_data(uvm_vs_skcm_filtered))
-ggsave("plots/uvm_vs_skcm_volcano.pdf", uvm_vs_skcm_p,
+uvm_vs_skcm_p <- plot_volcano(
+  label_significant_genes(uvm_vs_skcm_filtered)
+)
+ggsave(
+  "plots/uvm_vs_skcm_volcano.pdf", uvm_vs_skcm_p,
   width = 9, height = 5
 )
 
-uvm_vs_pan_cancer_p <- plot_volcano(prepare_volcano_data(uvm_vs_pan_cancer_filtered))
-ggsave("plots/uvm_vs_pan_cancer_volcano.pdf", uvm_vs_pan_cancer_p,
+uvm_vs_pan_cancer_p <- plot_volcano(
+  label_significant_genes(uvm_vs_pan_cancer_filtered)
+)
+ggsave(
+"plots/uvm_vs_pan_cancer_volcano.pdf", uvm_vs_pan_cancer_p,
   width = 9, height = 5
 )
