@@ -6,14 +6,18 @@ library(ggsignif)
 # Convert dataframes into long format and combine 
 prepare_boxplot_data <- function(
     ranks_df_a, ranks_df_b, top_genes, label_a, label_b) {
-  process_ranks_df <- function(ranks_df, label) {
-    filtered_df <- ranks_df %>%
+    # This function is defined within another function
+    # You could try defining it outside 
+    # Would make this make sense to have it 
+    # accesible outside of the parent function
+  process_ranks_df <- function(ranks_df, label) { # This function is defined within another function
+    filtered_df <- ranks_df |>
       filter(genes %in% top_genes)
 
-    df_long <- filtered_df %>%
+    df_long <- filtered_df |>
       pivot_longer(
         cols = -genes, names_to = "cell_line", values_to = "rank"
-      ) %>%
+      ) |>
       mutate(type = label)
 
     return(df_long)
@@ -66,6 +70,11 @@ plot_boxplot <- function(plot_df) {
     ) +
     scale_fill_manual(values = fill_colors)
 }
+# How much of plot boxplots and plot_stats boxplots is shared? 
+# Could you think of a way to add a "plot-type" argument 
+# and then add logical statement to do different things when 
+# one type of plot is true? 
+
 
 plot_stats_boxplots <- function(plot_df, label_a, label_b) {
   labels <- unique(plot_df[["type"]])
