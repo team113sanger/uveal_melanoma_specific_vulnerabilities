@@ -75,9 +75,9 @@ top_genes_Nsk <- head(uvm_vs_pan_cancer_filtered_sig[["genes"]], 10)
 
 # Create plots
 uvm_vs_skcm_p <- plot_boxplot(
-  prepare_boxplot_data(uvm_ranks, top_genes_sk, "UVM"),
-  prepare_boxplot_data(avana_sk_ranks, top_genes_sk, "SKCM"),
-  "UVM", "SKCM"
+  prepare_boxplot_data(
+    uvm_ranks, avana_sk_ranks, top_genes_sk, "UVM", "SKCM"
+  )
 )
 ggsave(
   "plots/uvm_vs_skcm_boxplot.pdf", uvm_vs_skcm_p,
@@ -85,9 +85,9 @@ ggsave(
 )
 
 uvm_vs_pan_p <- plot_boxplot(
-  prepare_boxplot_data(uvm_ranks, top_genes_Nsk, "UVM"),
-  prepare_boxplot_data(avana_Nsk_ranks, top_genes_Nsk, "Pan_cancer"),
-  "UVM", "Pan_cancer"
+  prepare_boxplot_data(
+    uvm_ranks, avana_Nsk_ranks, top_genes_Nsk, "UVM", "Pan_cancer"
+  )
 )
 ggsave(
   "plots/uvm_vs_pan_cancer_boxplot.pdf", uvm_vs_pan_p,
@@ -96,9 +96,9 @@ ggsave(
 
 # Create plots with stats bars
 uvm_vs_skcm_p <- plot_stats_boxplots(
-  prepare_boxplot_data(uvm_ranks, top_genes_sk, "UVM"),
-  prepare_boxplot_data(avana_sk_ranks, top_genes_sk, "SKCM"),
-  "UVM", "SKCM"
+  prepare_boxplot_data(
+    uvm_ranks, avana_sk_ranks, top_genes_sk, "UVM", "SKCM"
+  )
 )
 ggsave(
   "plots/uvm_vs_skcm_stats_boxplot.pdf", uvm_vs_skcm_p,
@@ -106,9 +106,9 @@ ggsave(
 )
 
 uvm_vs_pan_p <- plot_stats_boxplots(
-  prepare_boxplot_data(uvm_ranks, top_genes_Nsk, "UVM"),
-  prepare_boxplot_data(avana_Nsk_ranks, top_genes_Nsk, "Pan_cancer"),
-  "UVM", "Pan_cancer"
+  prepare_boxplot_data(
+    uvm_ranks, avana_Nsk_ranks, top_genes_Nsk, "UVM", "Pan_cancer"
+  )
 )
 ggsave(
   "plots/uvm_vs_pan_cancer_stats_boxplot.pdf", uvm_vs_pan_p,

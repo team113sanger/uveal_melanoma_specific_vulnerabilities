@@ -3,30 +3,39 @@ library(tidyr)
 library(ggplot2)
 library(ggsignif)
 
-prepare_boxplot_data <- function(ranks_df, top_genes, label) {
-  filtered_df <- ranks_df %>%
-    filter(genes %in% top_genes)
+prepare_boxplot_data <- function(ranks_df_a, ranks_df_b, top_genes, label_a, label_b) {
+  process_ranks_df <- function(ranks_df, label) {
+    filtered_df <- ranks_df %>%
+      filter(genes %in% top_genes)
+    
+    df_long <- filtered_df %>%
+      pivot_longer(
+        cols = -genes, names_to = "cell_line", values_to = "rank"
+      ) %>%
+      mutate(type = label)
+    
+    return(df_long)
+  }
 
-  df_long <- filtered_df %>%
-    pivot_longer(
-      cols = -genes, names_to = "cell_line", values_to = "rank"
-    ) %>%
-    mutate(type = label)
+  df_long_a <- process_ranks_df(ranks_df_a, label_a)
+  df_long_b <- process_ranks_df(ranks_df_b, label_b)
 
-  df_long[["genes"]] <-
-    factor(df_long[["genes"]], levels = top_genes)
+  combined_df <- bind_rows(df_long_a, df_long_b)
 
-  return(df_long)
+  combined_df[["genes"]] <-
+    factor(combined_df[["genes"]], levels = top_genes)
+
+  combined_df[["type"]] <-
+    factor(combined_df[["type"]], levels = c(label_a, label_b))
+
+  return(combined_df)
 }
 
-plot_boxplot <- function(df_a, df_b, label_a, label_b) {
-  plot_df <- bind_rows(df_a, df_b)
-
-  plot_df[["type"]] <-
-    factor(plot_df[["type"]], levels = c(label_a, label_b))
+plot_boxplot <- function(plot_df) {
+  labels <- unique(plot_df[["type"]])
 
   fill_colors <- setNames(
-    c("deepskyblue4", "sandybrown"), c(label_a, label_b)
+    c("deepskyblue4", "sandybrown"), labels
   )
 
   ggplot(plot_df, aes(x = genes, y = rank, fill = type)) +
@@ -50,22 +59,17 @@ plot_boxplot <- function(df_a, df_b, label_a, label_b) {
       panel.grid.major.y = element_line()
     ) +
     labs(
-      title = paste0("Top 10 ", label_a, "-specific Gene Vulnerabilities"),
+      title = paste0("Top 10 ", labels[1], "-specific Gene Vulnerabilities"),
       y = "Rank"
     ) +
     scale_fill_manual(values = fill_colors)
 }
 
-plot_stats_boxplots <- function(df_a, df_b, label_a, label_b) {
-  plot_df <- bind_rows(df_a, df_b)
-
-  plot_df[["type"]] <- factor(
-    plot_df[["type"]],
-    levels = c(label_a, label_b)
-  )
+plot_stats_boxplots <- function(plot_df, label_a, label_b) {
+  labels <- unique(plot_df[["type"]])
 
   fill_colors <- setNames(
-    c("deepskyblue4", "sandybrown"), c(label_a, label_b)
+    c("deepskyblue4", "sandybrown"), labels
   )
 
   ggplot(plot_df, aes(x = type, y = rank, fill = type)) +
@@ -76,7 +80,7 @@ plot_stats_boxplots <- function(df_a, df_b, label_a, label_b) {
       outlier.fill = NA
     ) +
     geom_signif(
-      comparisons = list(c(label_a, label_b)),
+      comparisons = list(as.character(labels)),
       map_signif_level = TRUE,
       test = "wilcox.test"
     ) +
@@ -96,7 +100,7 @@ plot_stats_boxplots <- function(df_a, df_b, label_a, label_b) {
       panel.grid.major.y = element_line()
     ) +
     labs(
-      title = paste0("Top 10 ", label_a, "-specific Gene Vulnerabilities"),
+      title = paste0("Top 10 ", labels[1], "-specific Gene Vulnerabilities"),
       y = "Rank"
     ) +
     scale_fill_manual(values = fill_colors)
