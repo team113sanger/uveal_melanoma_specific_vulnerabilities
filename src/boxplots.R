@@ -7,13 +7,13 @@ prepare_boxplot_data <- function(ranks_df_a, ranks_df_b, top_genes, label_a, lab
   process_ranks_df <- function(ranks_df, label) {
     filtered_df <- ranks_df %>%
       filter(genes %in% top_genes)
-    
+
     df_long <- filtered_df %>%
       pivot_longer(
         cols = -genes, names_to = "cell_line", values_to = "rank"
       ) %>%
       mutate(type = label)
-    
+
     return(df_long)
   }
 
@@ -55,7 +55,7 @@ plot_boxplot <- function(plot_df) {
       plot.title = element_text(size = 16),
       legend.title = element_blank(),
       legend.justification = c("right", "top"),
-      #legend.position = c(.95, 1.1),
+      # legend.position = c(.95, 1.1),
       panel.grid.major.y = element_line()
     ) +
     labs(

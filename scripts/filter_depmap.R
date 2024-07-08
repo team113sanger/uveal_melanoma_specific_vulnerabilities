@@ -3,7 +3,8 @@ library(readr)
 
 # Load depmap data
 anno <- read.table(
-  "data/annotation.tsv", sep = " ", header = TRUE
+  "data/annotation.tsv",
+  sep = " ", header = TRUE
 ) %>%
   select(DepMap_ID, primary_disease)
 
