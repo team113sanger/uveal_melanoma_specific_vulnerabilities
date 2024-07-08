@@ -116,7 +116,6 @@ ggsave(
 )
 
 #### Volcano Plots ####
-# Create plots
 uvm_vs_skcm_p <- plot_volcano(
   label_significant_genes(uvm_vs_skcm_filtered)
 )

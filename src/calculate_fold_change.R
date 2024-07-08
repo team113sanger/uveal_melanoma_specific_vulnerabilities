@@ -16,6 +16,7 @@ perform_mann_whitney <- function(data_a, data_b) {
   ))
 }
 
+# Apply mann whitney test to each row across two dataframes of ranks
 get_mann_whitney_results <- function(ranks_df, ranks_df_2) {
   df <- t(apply(cbind(ranks_df[, -1], ranks_df_2[, -1]), 1, function(row) {
     perform_mann_whitney(

@@ -3,7 +3,9 @@ library(tidyr)
 library(ggplot2)
 library(ggsignif)
 
-prepare_boxplot_data <- function(ranks_df_a, ranks_df_b, top_genes, label_a, label_b) {
+# Convert dataframes into long format and combine 
+prepare_boxplot_data <- function(
+    ranks_df_a, ranks_df_b, top_genes, label_a, label_b) {
   process_ranks_df <- function(ranks_df, label) {
     filtered_df <- ranks_df %>%
       filter(genes %in% top_genes)
