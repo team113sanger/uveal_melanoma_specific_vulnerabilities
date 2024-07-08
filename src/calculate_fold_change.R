@@ -24,12 +24,12 @@ get_mann_whitney_results <- function(ranks_df, ranks_df_2) {
     )
   }))
 
-  df <- as.data.frame(df) %>%
+  stats_df <- as.data.frame(df) %>%
     mutate(genes = ranks_df[["genes"]]) %>%
     mutate(Padj = p.adjust(p_value, method = "BH")) %>%
     select(genes, W_statistic, p_value, Padj)
 
-  return(df)
+  return(stats_df)
 }
 
 calculate_fold_change <- function(stats_df, ranks_df, ranks_df_2) {
