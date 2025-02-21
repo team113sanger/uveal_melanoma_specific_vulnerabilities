@@ -1,7 +1,7 @@
 # UVM_CRISPR_DepMap_Analysis
 
 ## Description
-Analyses to compare MAGeCK beta scores of our in-house Uveal Melanoma (UVM) CRISPR screen with the Avana DepMap dataset.
+Analyses to compare MAGeCK beta scores of Uveal Melanoma (UVM) CRISPR screens with the Avana DepMap dataset.
 
 ## Data
 Raw data are stored in `data`:
@@ -21,12 +21,12 @@ Processed data are stored in `processed_data`.
 - Filters DepMap and UVM data for only common genes
 
 ### Calculate Fold Changes and Plotting
-Results tables are in `processed_data`.  
+Results tables are in `results`.  
 Output plots are in `plots`.
 
 `uvm_vs_depmap.R`:
-- Ranks the beta scores in UVM, SKCM and Pan-cancer groups
-- Calculates fold changes for 'UVM vs SKCM' and 'UVM vs Pan-cancer'
+- Ranks the beta scores in UVM and Pan-cancer groups
+- Calculates fold changes for 'UVM vs Pan-cancer'
 - Plots boxplots of ranks for the top 10 UVM specific significant genes
 - Plots volcano plots of fold changes, highlighting significantly upregulated or downregulated genes
 
