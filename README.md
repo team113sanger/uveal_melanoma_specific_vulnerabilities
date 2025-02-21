@@ -6,8 +6,8 @@ Analyses to compare MAGeCK beta scores of Uveal Melanoma (UVM) CRISPR screens wi
 ## Data
 Raw data are stored in `data`:
 - `annotation.tsv`: Downloaded annotations from DepMap
-- `avana.tsv`: MAGeCK beta scroes of AVANA data from DepMap
-- `MAGeCK_gene_corrected_beta.tsv`: MAGeCK beta scores from the UVM screen
+- `avana.tsv`: MAGeCK beta scroes of DepMap screens
+- `MAGeCK_gene_corrected_beta.tsv`: MAGeCK beta scores of UVM screens
 - `pan_genes.csv`: list of pan essential genes from ...?
 
 ## Analyses
