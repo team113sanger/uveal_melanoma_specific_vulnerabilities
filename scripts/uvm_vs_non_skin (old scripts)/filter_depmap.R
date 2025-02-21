@@ -40,7 +40,7 @@ filter_avana_by_cancer_type <- function(
 avana_sk <- filter_avana_by_cancer_type(avana, anno, "Skin Cancer")
 
 non_skin_cancer_lines <- anno |>
-  filter(!primary_disease %in% c("Skin Cancer", "Unknown", "Non-Cancerous")) |>
+  filter(!primary_disease %in% c("Skin Cancer")) |>
   distinct(primary_disease) |>
   pull(primary_disease)
 

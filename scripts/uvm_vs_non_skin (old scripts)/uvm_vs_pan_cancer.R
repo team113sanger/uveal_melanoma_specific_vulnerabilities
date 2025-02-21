@@ -79,7 +79,7 @@ uvm_vs_pan_cancer_filtered_sig <- filtered_fold_change_dfs[[4]]
 #### Box plots ####
 # Get top 10 UVM specific genes
 top_genes_sk <- head(uvm_vs_skcm_filtered_sig[["genes"]], 10)
-top_genes_Nsk <- head(uvm_vs_pan_cancer_filtered_sig[["genes"]], 10)
+top_genes_nUVM <- head(uvm_vs_pan_cancer_filtered_sig[["genes"]], 10)
 
 # Create plots
 create_and_save_boxplots <- function(
@@ -104,11 +104,11 @@ params <- list(
   ranks_df_a = list(uvm_ranks, uvm_ranks, uvm_ranks, uvm_ranks),
   ranks_df_b = list(
   avana_sk_ranks,
-  avana_Nsk_ranks,
+  avana_nUVM_ranks,
   avana_sk_ranks,
-  avana_Nsk_ranks
+  avana_nUVM_ranks
   ),
-  top_genes = list(top_genes_sk, top_genes_Nsk, top_genes_sk, top_genes_Nsk),
+  top_genes = list(top_genes_sk, top_genes_nUVM, top_genes_sk, top_genes_nUVM),
   label_a = list("UVM", "UVM", "UVM", "UVM"),
   label_b = list("SKCM", "Pan_cancer", "SKCM", "Pan_cancer"),
   stats = list(FALSE, FALSE, TRUE, TRUE),
