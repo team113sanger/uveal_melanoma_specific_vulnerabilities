@@ -49,8 +49,8 @@ filter_fc_results <- function(df, genes_to_remove, signifcant_only = FALSE) {
     filter(!genes %in% genes_to_remove[["Gene"]])
 
   if (signifcant_only) {
-    Log2FC_cutoff <- 1.5
-    padj_cutoff <- 0.05
+    Log2FC_cutoff <- 1.83
+    padj_cutoff <- 0.01
 
     df_filtered_sig <- df_filtered %>%
       filter(LFC > Log2FC_cutoff & Padj < padj_cutoff) %>%
@@ -58,6 +58,7 @@ filter_fc_results <- function(df, genes_to_remove, signifcant_only = FALSE) {
 
     return(df_filtered_sig)
   } else {
-    return(df_filtered)
+    return(df_filtered |>
+      arrange(desc(LFC)))
   }
 }
