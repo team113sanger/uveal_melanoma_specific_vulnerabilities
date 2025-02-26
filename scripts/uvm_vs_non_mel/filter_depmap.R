@@ -21,12 +21,21 @@ non_melanoma_lines <- anno |>
   filter(!grepl("melanoma", Subtype, ignore.case = TRUE)) |>  
   pull(DepMap_ID)
 
+anno |>
+  filter(DepMap_ID %in% melanoma_lines)
+
 avana_nMel <- avana |>
     select(
       genes,
       any_of(non_melanoma_lines)
     )
-  
+
+# Save file with cell lines removed from avana
+removed_lines <- anno |>
+  filter(!DepMap_ID %in% non_melanoma_lines) |>
+  filter(DepMap_ID %in% colnames(avana))
+write_tsv(removed_lines, file.path("processed_data", "removed_lines.tsv"))
+
 # Select only common genes in UVM data and depmap
 common_genes <- intersect(uvm_beta_scores[["genes"]], avana[["genes"]])
 
