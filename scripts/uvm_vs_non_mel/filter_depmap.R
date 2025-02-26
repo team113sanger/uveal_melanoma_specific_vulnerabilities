@@ -21,9 +21,6 @@ non_melanoma_lines <- anno |>
   filter(!grepl("melanoma", Subtype, ignore.case = TRUE)) |>  
   pull(DepMap_ID)
 
-anno |>
-  filter(DepMap_ID %in% melanoma_lines)
-
 avana_nMel <- avana |>
     select(
       genes,
