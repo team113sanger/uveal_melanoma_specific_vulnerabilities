@@ -103,16 +103,11 @@ pmap(params, create_and_save_boxplots)
 
 #### Volcano Plots ####
 create_and_save_volcano <- function(df, file_name) {
-  label_significant_genes(df) |>
-    plot_volcano(df = _) |>
-    ggsave(
-      file.path("plots", file_name),
-      plot = _,
-      width = 9, height = 5
-    )
+  df <- label_significant_genes(df)
+  plot <- plot_volcano(df)
+
+  ggsave(file.path("plots", paste0(file_name, ".pdf")), plot, width = 8, height = 7)
+  ggsave(file.path("plots", paste0(file_name, ".png")), plot, width = 8, height = 7, dpi = 300)
 }
 
-walk2(list(uvm_vs_pan_cancer_filtered),
-  list("uvm_vs_pan_cancer_volcano.pdf"),
-  .f = create_and_save_volcano
-)
+create_and_save_volcano(uvm_vs_pan_cancer_filtered, "uvm_vs_pan_cancer_volcano")
