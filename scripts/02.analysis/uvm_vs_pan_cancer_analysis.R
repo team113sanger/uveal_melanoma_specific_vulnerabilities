@@ -12,7 +12,7 @@ pan_cancer_scores <- read_tsv("data/processed/pan_cancer_scores.tsv")
 uvm_scores <- read_tsv("data/processed/uvm_scores.tsv")
 
 # Load other
-pan_essential_genes <- read_csv("data/raw/pan_genes.csv")
+pan_essential_genes <- read_csv("data/metadata/pan_genes.csv")
 
 #### Get ranked data ####
 uvm_ranks <- rank_scores(uvm_scores)
