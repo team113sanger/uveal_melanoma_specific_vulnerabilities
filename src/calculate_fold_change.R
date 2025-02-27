@@ -38,7 +38,7 @@ calculate_fold_change <- function(stats_df, ranks_df, ranks_df_2) {
       median_rank_a = apply(ranks_df[, -1], 1, median),
       median_rank_b = apply(ranks_df_2[, -1], 1, median),
       FC = median_rank_b / median_rank_a,
-      LFC = log2(FC)
+      log2FC = log2(FC)
     )
 
   return(new_df)
@@ -49,16 +49,16 @@ filter_fc_results <- function(df, genes_to_remove, signifcant_only = FALSE) {
     filter(!genes %in% genes_to_remove[["Gene"]])
 
   if (signifcant_only) {
-    Log2FC_cutoff <- 1.83
+    Log2FC_cutoff <- 1.80
     padj_cutoff <- 0.01
 
     df_filtered_sig <- df_filtered %>%
-      filter(LFC > Log2FC_cutoff & Padj < padj_cutoff) %>%
-      arrange(desc(LFC))
+      filter(log2FC > Log2FC_cutoff & Padj < padj_cutoff) %>%
+      arrange(desc(log2FC))
 
     return(df_filtered_sig)
   } else {
     return(df_filtered |>
-      arrange(desc(LFC)))
+      arrange(desc(log2FC)))
   }
 }
