@@ -1,4 +1,5 @@
 source("scripts/02.analysis/calculate_fold_change.R")
+source("scripts/03.visualisation/boxplots.R")
 
 library(readr)
 library(purrr)
@@ -27,19 +28,6 @@ walk2(
     "results/tables/pan_cancer_ranks.tsv"
   ), write_tsv
 )
-
-# Reshape ranks data
-uvm_long <- uvm_ranks %>%
-  pivot_longer(-genes, names_to = "Cell_Line", values_to = "Rank") %>%
-  mutate(Group = "UVM")
-
-pan_cancer_long <- pan_cancer_ranks %>%
-  pivot_longer(-genes, names_to = "Cell_Line", values_to = "Rank") %>%
-  mutate(Group = "Pan-Cancer")
-
-combined_ranks <- bind_rows(uvm_long, pan_cancer_long) %>%
-  select(genes, Group, Rank) %>%
-  rename(Gene = genes)
 
 #### Calculate fold changes ####
 # UVM vs Pan Cancer
@@ -73,11 +61,12 @@ filtered_fold_change_dfs <- pmap(
   .f = filter_fc_and_write
 )
 
-uvm_vs_pan_cancer <- filtered_fold_change_dfs[[1]]
+# Process ranks dfs in prep for plotting
 uvm_vs_pan_cancer_sig <- filtered_fold_change_dfs[[2]]
 
 top_genes <- head(uvm_vs_pan_cancer_sig[["genes"]], 10)
-top_genes_ranks <- combined_ranks |>
-  filter(Gene %in% top_genes) |>
-  arrange(match(Gene, top_genes))
-write_tsv(top_genes_ranks, "results/tables/top_10_uvm_pan_cancer_ranks.tsv")
+
+processed_ranks <- prepare_boxplot_data(
+    uvm_ranks, pan_cancer_ranks, top_genes, "UVM", "Pan-Cancer"
+  )
+write_tsv(processed_ranks, "results/tables/top_10_uvm_pan_cancer_ranks.tsv")

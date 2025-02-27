@@ -6,13 +6,15 @@ library(ggsignif)
 # Convert dataframes into long format and combine
 process_ranks_df <- function(ranks_df, top_genes, label) {
   filtered_df <- ranks_df |>
-    filter(genes %in% top_genes)
+    filter(genes %in% top_genes) |>
+    arrange(match(genes, top_genes)) |>
+    rename(gene = genes)
 
   df_long <- filtered_df |>
     pivot_longer(
-      cols = -genes, names_to = "cell_line", values_to = "rank"
+      cols = -gene, names_to = "cell_line", values_to = "rank"
     ) |>
-    mutate(type = label)
+    mutate(group = label)
 
   return(df_long)
 }
@@ -24,26 +26,26 @@ prepare_boxplot_data <- function(
 
   combined_df <- bind_rows(df_long_a, df_long_b)
 
-  combined_df[["genes"]] <-
-    factor(combined_df[["genes"]], levels = top_genes)
+  combined_df[["gene"]] <-
+    factor(combined_df[["gene"]], levels = top_genes)
 
-  combined_df[["type"]] <-
-    factor(combined_df[["type"]], levels = c(label_a, label_b))
+  combined_df[["group"]] <-
+    factor(combined_df[["group"]], levels = c(label_a, label_b))
 
   return(combined_df)
 }
 
 plot_boxplot <- function(plot_df, stats = FALSE) {
-  labels <- unique(plot_df[["type"]])
+  labels <- unique(plot_df[["group"]])
 
   fill_colors <- setNames(
-    c("deepskyblue4", "sandybrown"), labels
+    c("#226E9C", "#AB1866"), labels
   )
 
   if (stats) {
-    aes_mapping <- aes(x = type, y = rank, fill = type)
+    aes_mapping <- aes(x = group, y = rank, fill = group)
   } else {
-    aes_mapping <- aes(x = genes, y = rank, fill = type)
+    aes_mapping <- aes(x = gene, y = rank, fill = group)
   }
 
   p <- ggplot(plot_df, aes_mapping) +
@@ -55,25 +57,23 @@ plot_boxplot <- function(plot_df, stats = FALSE) {
     ) +
     theme_classic() +
     theme(
-      axis.text.x = element_text(size = 10),
+      axis.text.x = element_text(angle = 35, hjust = 1, size = 14, face = "italic"),
+      axis.text.y = element_text(size = 14),
       axis.ticks.x = element_blank(),
-      axis.title.x = element_blank(),
+      axis.title.x = element_text(size = 14),
       axis.title.y = element_text(size = 14),
-      plot.title = element_text(size = 16),
+      title = element_text(size = 15, face = "bold", hjust = 0.5),
       legend.title = element_blank(),
+      legend.text = element_text(size = 12),
       legend.justification = c("right", "top"),
-      # legend.position = c(.95, 1.1),
       panel.grid.major.y = element_line()
     ) +
-    labs(
-      title = paste0("Top 10 ", labels[1], "-specific Gene Vulnerabilities"),
-      y = "Rank"
-    ) +
+    labs(title = "Gene Rank Comparison", x = "Gene", y = "Rank") +
     scale_fill_manual(values = fill_colors)
 
   if (stats) {
     p +
-      facet_wrap(~genes, scales = "free") +
+      facet_wrap(~gene, scales = "free") +
       geom_signif(
         comparisons = list(as.character(labels)),
         map_signif_level = TRUE,
