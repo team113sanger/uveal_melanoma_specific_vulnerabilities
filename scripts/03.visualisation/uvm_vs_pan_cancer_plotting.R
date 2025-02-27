@@ -5,37 +5,32 @@ library(readr)
 library(purrr)
 library(dplyr)
 
+top_ranks <- read_tsv("results/tables/top_10_uvm_pan_cancer_ranks.tsv")
 uvm_vs_pan_cancer <- read_tsv("results/tables/uvm_vs_pan_cancer.tsv")
 uvm_vs_pan_cancer_sig <- read_tsv("results/tables/uvm_vs_pan_cancer_sig.tsv")
 
+# Add levels
+top_ranks[["gene"]] <-
+    factor(top_ranks[["gene"]], levels = unique(top_ranks$gene))
+
+top_ranks[["group"]] <-
+    factor(top_ranks[["group"]], levels = c("UVM", "Pan-Cancer"))
+
 #### Box plots ####
-# Get top 10 UVM specific genes
-top_genes <- head(uvm_vs_pan_cancer_sig[["genes"]], 10)
 # Create plots
-create_and_save_boxplots <- function(
-  ranks_df_a, ranks_df_b, top_genes, label_a,
-  label_b, stats = FALSE, file_name
-) {
-  plot_df <- prepare_boxplot_data(
-    ranks_df_a, ranks_df_b, top_genes, label_a, label_b
-  )
-  
+create_and_save_boxplots <- function(plot_df, stats, file_name){
   plot <- plot_boxplot(plot_df = plot_df, stats = stats)
   
   ggsave(
     file.path("results", "figures", file_name),
     plot = plot,
     width = ifelse(stats, 10, 9),
-    height = ifelse(stats, 8, 5)
+    height = ifelse(stats, 9, 7)
   )
 }
 
 params <- list(
-  ranks_df_a = rep(list(uvm_ranks), 2),
-  ranks_df_b = rep(list(pan_cancer_ranks), 2),
-  top_genes = rep(list(top_genes), 2),
-  label_a = list("UVM", "UVM"),
-  label_b = list("Pan_cancer", "Pan_cancer"),
+  plot_df = rep(list(top_ranks), 2),
   stats = list(FALSE, TRUE),
   file_name = list(
   "uvm_vs_pan_cancer_boxplot.pdf",
@@ -54,4 +49,4 @@ create_and_save_volcano <- function(df, file_name) {
   ggsave(file.path("results", "figures", paste0(file_name, ".png")), plot, width = 8, height = 7, dpi = 300)
 }
 
-create_and_save_volcano(uvm_vs_pan_cancer_filtered, "uvm_vs_pan_cancer_volcano")
+create_and_save_volcano(uvm_vs_pan_cancer, "uvm_vs_pan_cancer_volcano")

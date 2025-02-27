@@ -57,8 +57,8 @@ plot_boxplot <- function(plot_df, stats = FALSE) {
     ) +
     theme_classic() +
     theme(
-      axis.text.x = element_text(angle = 35, hjust = 1, size = 14, face = "italic"),
-      axis.text.y = element_text(size = 14),
+      axis.text.x = element_text(angle = 35, hjust = 1, size = 12, face = "italic"),
+      axis.text.y = element_text(size = 12),
       axis.ticks.x = element_blank(),
       axis.title.x = element_text(size = 14),
       axis.title.y = element_text(size = 14),
@@ -82,9 +82,11 @@ plot_boxplot <- function(plot_df, stats = FALSE) {
       coord_cartesian(
         ylim = c(0, max(plot_df[["rank"]]) * 1.15)
       ) +
-      theme(legend.position = "none")
+      theme(legend.position = "none",
+            axis.text.x = element_text(size = 12, face = "plain"),
+            ) +
+      scale_x_discrete(guide = guide_axis(angle = 0))
   } else {
-    p + scale_x_discrete(guide = guide_axis(angle = 90)) +
-      theme(legend.justification = c("right", "top"))
+    p + theme(legend.justification = c("right", "top"))
   }
 }
