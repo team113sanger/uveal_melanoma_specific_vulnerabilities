@@ -4,16 +4,16 @@ library(vroom)
 
 # Load depmap data
 anno <- read.table(
-  "data/annotation.tsv",
+  "data/raw/annotation.tsv",
   sep = " ", header = TRUE
 ) |>
   select(DepMap_ID, primary_disease, Subtype)
 
-avana <- vroom("data/avana.tsv")
+avana <- vroom("data/raw/avana.tsv")
 avana <- na.omit(avana)
 
 # Load UVM data
-uvm_beta_scores <- read_tsv("data/MAGeCK_gene_corrected_beta.tsv")
+uvm_beta_scores <- read_tsv("data/raw/MAGeCK_gene_corrected_beta.tsv")
 
 # Divide avana data into pan-cancer group
 non_melanoma_lines <- anno |>
@@ -31,7 +31,7 @@ avana_nMel <- avana |>
 removed_lines <- anno |>
   filter(!DepMap_ID %in% non_melanoma_lines) |>
   filter(DepMap_ID %in% colnames(avana))
-write_tsv(removed_lines, file.path("processed_data", "removed_lines.tsv"))
+write_tsv(removed_lines, file.path("data", "metadata", "avana_removed_cell_lines.tsv"))
 
 # Select only common genes in UVM data and depmap
 common_genes <- intersect(uvm_beta_scores[["genes"]], avana[["genes"]])
@@ -46,7 +46,7 @@ filter_genes <- function(df, genes_to_keep) {
 
 process_and_write_files <- function(df, filename) {
   scores_df <- filter_genes(df, common_genes)
-  write_tsv(scores_df, file.path("processed_data", filename))
+  write_tsv(scores_df, file.path("data", "processed", filename))
 }
 
 datasets <- list(avana_nMel, uvm_beta_scores)
