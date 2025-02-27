@@ -19,22 +19,29 @@ top_ranks[["group"]] <-
 #### Box plots ####
 # Create plots
 create_and_save_boxplots <- function(plot_df, stats, file_name){
-  plot <- plot_boxplot(plot_df = plot_df, stats = stats)
+    plot <- plot_boxplot(plot_df = plot_df, stats = stats)
   
-  ggsave(
-    file.path("results", "figures", file_name),
-    plot = plot,
-    width = ifelse(stats, 10, 9),
-    height = ifelse(stats, 9, 7)
-  )
+    ggsave(
+        file.path("results", "figures", paste0(file_name, ".pdf")),
+        plot = plot,
+        width = ifelse(stats, 10, 9),
+        height = ifelse(stats, 9, 7)
+    )
+    ggsave(
+        file.path("results", "figures", paste0(file_name, ".png")),
+        plot = plot,
+        width = ifelse(stats, 10, 9),
+        height = ifelse(stats, 9, 7),
+        dpi = 300
+    )
 }
 
 params <- list(
   plot_df = rep(list(top_ranks), 2),
   stats = list(FALSE, TRUE),
   file_name = list(
-  "uvm_vs_pan_cancer_boxplot.pdf",
-  "uvm_vs_pan_cancer_stats_boxplot.pdf"
+  "uvm_vs_pan_cancer_boxplot",
+  "uvm_vs_pan_cancer_stats_boxplot"
 )
 )
 

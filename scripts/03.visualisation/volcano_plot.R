@@ -35,9 +35,9 @@ plot_volcano <- function(df) {
       ) +
       theme_classic() +
       theme(
-        axis.title.x = element_text(size = 15),
-        axis.title.y = element_text(size = 15),
-        axis.text = element_text(size = 13, color = "black"),
+        axis.title.x = element_text(size = 13),
+        axis.title.y = element_text(size = 13),
+        axis.text = element_text(size = 11, color = "black"),
         legend.position = "none"  
       ) +
       scale_x_reverse() 

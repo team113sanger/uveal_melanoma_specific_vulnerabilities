@@ -57,16 +57,17 @@ plot_boxplot <- function(plot_df, stats = FALSE) {
     ) +
     theme_classic() +
     theme(
-      axis.text.x = element_text(angle = 35, hjust = 1, size = 12, face = "italic"),
+      axis.text.x = element_text(angle = 25, hjust = 0.5, vjust = 0.63, size = 12, face = "italic"),
       axis.text.y = element_text(size = 12),
-      axis.ticks.x = element_blank(),
       axis.title.x = element_text(size = 14),
       axis.title.y = element_text(size = 14),
       title = element_text(size = 15, face = "bold", hjust = 0.5),
       legend.title = element_blank(),
       legend.text = element_text(size = 12),
       legend.justification = c("right", "top"),
-      panel.grid.major.y = element_line()
+      panel.grid.major.y = element_line(),
+      axis.ticks = element_line(color = "black"),
+
     ) +
     labs(title = "Gene Rank Comparison", x = "Gene", y = "Rank") +
     scale_fill_manual(values = fill_colors)
