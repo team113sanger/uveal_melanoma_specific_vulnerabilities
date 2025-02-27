@@ -6,7 +6,7 @@ label_significant_genes <- function(df) {
   df %>%
     mutate(
       significant = case_when(
-        Padj < 0.05 & abs(log2FC) > 1.8 ~ ifelse(log2FC > 0, "Upregulated", "Downregulated"),
+        Padj < 0.01 & abs(log2FC) > 1.8 ~ ifelse(log2FC > 0, "Upregulated", "Downregulated"),
         TRUE ~ "Not Significant"
       )
     )
