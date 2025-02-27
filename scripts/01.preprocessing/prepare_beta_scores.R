@@ -4,7 +4,7 @@ library(vroom)
 
 # Load depmap data
 anno <- read.table(
-  "data/raw/annotation.tsv",
+  "data/metadata/annotation.tsv",
   sep = " ", header = TRUE
 ) |>
   select(DepMap_ID, primary_disease, Subtype)
