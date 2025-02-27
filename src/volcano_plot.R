@@ -18,7 +18,7 @@ plot_volcano <- function(df) {
     head(10)
     
   ggplot(df, aes(x = log2FC, y = -log10(Padj), color = significant)) +
-      geom_point(shape = 19, alpha = 0.7) +
+      geom_point(shape = 19, alpha = 0.85) +
       scale_color_manual(
         values = c("Not Significant" = "#808080", "Upregulated" = "#226E9C", "Downregulated" = "#2E8B57")
       ) +
