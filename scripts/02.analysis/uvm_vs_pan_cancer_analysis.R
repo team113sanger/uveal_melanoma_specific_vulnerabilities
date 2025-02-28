@@ -5,6 +5,7 @@ library(readr)
 library(purrr)
 library(dplyr)
 library(tidyr)
+library(stringr)
 
 #### Load Data ####
 # Load depmap scores
@@ -34,13 +35,19 @@ walk2(
 uvm_vs_pan_cancer <- get_mann_whitney_results(uvm_ranks, pan_cancer_ranks) |>
   calculate_fold_change(stats_df = _, uvm_ranks, pan_cancer_ranks)
 
+# Add average gene essentiality score to table
+uvm_vs_pan_cancer <- add_gene_essentiality(uvm_scores, pan_cancer_scores, uvm_vs_pan_cancer)
+
 # Filter out pan essential genes
 filter_fc_and_write <- function(df, genes_to_remove, sig_only, file_name) {
   filtered_fcs <- filter_fc_results(
     df = df,
     genes_to_remove = genes_to_remove,
     signifcant_only = sig_only
-  )
+  ) |> 
+    rename_with(~ str_replace(.x, "_a$", "_UVM")) |>
+    rename_with(~ str_replace(.x, "_b$", "_Pan_Cancer"))
+
   write_tsv(filtered_fcs, file.path("results", "tables", file_name))
   return(filtered_fcs)
 }

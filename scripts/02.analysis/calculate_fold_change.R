@@ -62,3 +62,23 @@ filter_fc_results <- function(df, genes_to_remove, signifcant_only = FALSE) {
       arrange(desc(log2FC)))
   }
 }
+
+calc_avg_gene_essentiality <- function(scores_df) {
+  scores_df |>
+    mutate(mean_essentiality = rowMeans(across(-genes), na.rm = TRUE)) |>
+    select(genes, mean_essentiality)
+}
+
+add_gene_essentiality <- function(scores_df_a, scores_df_b, lfc_results_df) {
+  gene_ess_a <- calc_avg_gene_essentiality(scores_df_a)
+  gene_ess_b <- calc_avg_gene_essentiality(scores_df_b)
+
+  results_df <- lfc_results_df |>
+    left_join(gene_ess_a, by = "genes") |>
+    rename(mean_essentiality_a = mean_essentiality) |>
+    left_join(gene_ess_b, by = "genes") |>
+    rename(mean_essentiality_b = mean_essentiality)
+
+  return(results_df)
+}
+
