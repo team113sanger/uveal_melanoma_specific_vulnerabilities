@@ -67,7 +67,6 @@ plot_boxplot <- function(plot_df, stats = FALSE) {
       legend.justification = c("right", "top"),
       panel.grid.major.y = element_line(),
       axis.ticks = element_line(color = "black"),
-
     ) +
     labs(title = "Gene Rank Comparison", x = "Gene", y = "Rank") +
     scale_fill_manual(values = fill_colors)
@@ -83,9 +82,10 @@ plot_boxplot <- function(plot_df, stats = FALSE) {
       coord_cartesian(
         ylim = c(0, max(plot_df[["rank"]]) * 1.15)
       ) +
-      theme(legend.position = "none",
-            axis.text.x = element_text(size = 12, face = "plain"),
-            ) +
+      theme(
+        legend.position = "none",
+        axis.text.x = element_text(size = 12, face = "plain"),
+      ) +
       scale_x_discrete(guide = guide_axis(angle = 0))
   } else {
     p + theme(legend.justification = c("right", "top"))

@@ -11,38 +11,38 @@ uvm_vs_pan_cancer_sig <- read_tsv("results/tables/uvm_vs_pan_cancer_sig.tsv")
 
 # Add levels
 top_ranks[["gene"]] <-
-    factor(top_ranks[["gene"]], levels = unique(top_ranks$gene))
+  factor(top_ranks[["gene"]], levels = unique(top_ranks$gene))
 
 top_ranks[["group"]] <-
-    factor(top_ranks[["group"]], levels = c("UVM", "Pan-Cancer"))
+  factor(top_ranks[["group"]], levels = c("UVM", "Pan-Cancer"))
 
 #### Box plots ####
 # Create plots
-create_and_save_boxplots <- function(plot_df, stats, file_name){
-    plot <- plot_boxplot(plot_df = plot_df, stats = stats)
-  
-    ggsave(
-        file.path("results", "figures", paste0(file_name, ".pdf")),
-        plot = plot,
-        width = ifelse(stats, 10, 9),
-        height = ifelse(stats, 9, 7)
-    )
-    ggsave(
-        file.path("results", "figures", paste0(file_name, ".png")),
-        plot = plot,
-        width = ifelse(stats, 10, 9),
-        height = ifelse(stats, 9, 7),
-        dpi = 300
-    )
+create_and_save_boxplots <- function(plot_df, stats, file_name) {
+  plot <- plot_boxplot(plot_df = plot_df, stats = stats)
+
+  ggsave(
+    file.path("results", "figures", paste0(file_name, ".pdf")),
+    plot = plot,
+    width = ifelse(stats, 10, 9),
+    height = ifelse(stats, 9, 7)
+  )
+  ggsave(
+    file.path("results", "figures", paste0(file_name, ".png")),
+    plot = plot,
+    width = ifelse(stats, 10, 9),
+    height = ifelse(stats, 9, 7),
+    dpi = 300
+  )
 }
 
 params <- list(
   plot_df = rep(list(top_ranks), 2),
   stats = list(FALSE, TRUE),
   file_name = list(
-  "uvm_vs_pan_cancer_boxplot",
-  "uvm_vs_pan_cancer_stats_boxplot"
-)
+    "uvm_vs_pan_cancer_boxplot",
+    "uvm_vs_pan_cancer_stats_boxplot"
+  )
 )
 
 pmap(params, create_and_save_boxplots)

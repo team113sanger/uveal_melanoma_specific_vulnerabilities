@@ -17,15 +17,15 @@ uvm_beta_scores <- read_tsv("data/raw/MAGeCK_gene_corrected_beta.tsv")
 
 # Divide avana data into pan-cancer group
 non_melanoma_lines <- anno |>
-  filter(!primary_disease %in% c("Unknown", "Non-Cancerous")) |>  
-  filter(!grepl("melanoma", Subtype, ignore.case = TRUE)) |>  
+  filter(!primary_disease %in% c("Unknown", "Non-Cancerous")) |>
+  filter(!grepl("melanoma", Subtype, ignore.case = TRUE)) |>
   pull(DepMap_ID)
 
 avana_nMel <- avana |>
-    select(
-      genes,
-      any_of(non_melanoma_lines)
-    )
+  select(
+    genes,
+    any_of(non_melanoma_lines)
+  )
 
 # Save file with cell lines removed from avana
 removed_lines <- anno |>

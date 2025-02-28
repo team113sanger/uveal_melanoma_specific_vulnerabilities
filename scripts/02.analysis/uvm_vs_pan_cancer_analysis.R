@@ -67,6 +67,6 @@ uvm_vs_pan_cancer_sig <- filtered_fold_change_dfs[[2]]
 top_genes <- head(uvm_vs_pan_cancer_sig[["genes"]], 10)
 
 processed_ranks <- prepare_boxplot_data(
-    uvm_ranks, pan_cancer_ranks, top_genes, "UVM", "Pan-Cancer"
-  )
+  uvm_ranks, pan_cancer_ranks, top_genes, "UVM", "Pan-Cancer"
+)
 write_tsv(processed_ranks, "results/tables/top_10_uvm_pan_cancer_ranks.tsv")
