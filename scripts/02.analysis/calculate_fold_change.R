@@ -46,20 +46,19 @@ calculate_fold_change <- function(stats_df, ranks_df, ranks_df_2) {
 
 filter_fc_results <- function(df, genes_to_remove, signifcant_only = FALSE) {
   df_filtered <- df %>%
-    filter(!genes %in% genes_to_remove[["Gene"]])
+    filter(!genes %in% genes_to_remove[["Gene"]]) %>%
+    arrange(desc(log2FC))
 
   if (signifcant_only) {
     Log2FC_cutoff <- 1.80
     padj_cutoff <- 0.01
 
     df_filtered_sig <- df_filtered %>%
-      filter(log2FC > Log2FC_cutoff & Padj < padj_cutoff) %>%
-      arrange(desc(log2FC))
+      filter(log2FC > Log2FC_cutoff & Padj < padj_cutoff)
 
     return(df_filtered_sig)
   } else {
-    return(df_filtered |>
-      arrange(desc(log2FC)))
+    return(df_filtered)
   }
 }
 
