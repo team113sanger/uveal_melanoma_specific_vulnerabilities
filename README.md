@@ -1,12 +1,13 @@
 # UVM_VS_Pan_Cancer_MAGeCK_Analysis
 
 ## Description
-Analyses to compare MAGeCK beta scores of 10 Uveal Melanoma (UVM) CRISPR screens with Pan-Cancer screens from the Avana DepMap dataset.
+Analyses to compare MAGeCK beta scores of 10 Uveal Melanoma (UVM) CRISPR screens with Pan-Cancer screens from the Avana 22Q2 DepMap dataset.
 
 ## Raw Data
 Raw MAgeCK beta scores are stored in `data/raw`:
-- `avana.tsv`: MAGeCK beta scroes of DepMap screens
-- `MAGeCK_gene_corrected_beta.tsv`: MAGeCK beta scores of UVM screens  
+- `avana.tsv`: MAGeCK beta scores of DepMap screens
+- `MAGeCK_gene_corrected_beta.tsv`: MAGeCK beta scores of UVM screens  (derived from https://github.com/team113sanger/uveal_melanoma_CRISPR_downstream/blob/main/results/MAGeCK_gene_corrected_beta.tsv
+)
 
 Metadata are stored in `data/metadata`
 - `annotation.tsv`: Downloaded annotations from DepMap

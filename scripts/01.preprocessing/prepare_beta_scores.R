@@ -15,6 +15,7 @@ avana <- vroom("data/raw/avana.tsv")
 avana <- na.omit(avana)
 
 # Load UVM data
+# https://github.com/team113sanger/uveal_melanoma_CRISPR_downstream/blob/main/results/MAGeCK_gene_corrected_beta.tsv
 uvm_beta_scores <- read_tsv("data/raw/MAGeCK_gene_corrected_beta.tsv")
 
 # Divide avana data into pan-cancer group
