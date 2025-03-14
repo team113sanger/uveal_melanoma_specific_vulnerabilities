@@ -2,7 +2,9 @@ library(dplyr)
 library(readr)
 library(vroom)
 
-# Load depmap data
+
+# Load depmap 22Q2 data 
+# https:/q/depmap.org/portal/data_page/?tab=allData&releasename=DepMap%20Public%2022Q2&filename=sample_info.csv
 anno <- read.table(
   "data/metadata/annotation.tsv",
   sep = " ", header = TRUE
