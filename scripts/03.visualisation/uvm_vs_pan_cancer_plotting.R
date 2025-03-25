@@ -24,13 +24,13 @@ create_and_save_boxplots <- function(plot_df, stats, file_name) {
   ggsave(
     file.path("results", "figures", paste0(file_name, ".pdf")),
     plot = plot,
-    width = ifelse(stats, 10, 9),
+    width = ifelse(stats, 10, 9.5),
     height = ifelse(stats, 9, 7)
   )
   ggsave(
     file.path("results", "figures", paste0(file_name, ".png")),
     plot = plot,
-    width = ifelse(stats, 10, 9),
+    width = ifelse(stats, 10, 9.5),
     height = ifelse(stats, 9, 7),
     dpi = 300
   )
@@ -52,8 +52,8 @@ create_and_save_volcano <- function(df, file_name) {
   df <- label_significant_genes(df)
   plot <- plot_volcano(df)
 
-  ggsave(file.path("results", "figures", paste0(file_name, ".pdf")), plot, width = 8, height = 7)
-  ggsave(file.path("results", "figures", paste0(file_name, ".png")), plot, width = 8, height = 7, dpi = 300)
+  ggsave(file.path("results", "figures", paste0(file_name, ".pdf")), plot, width = 8, height = 6.5)
+  ggsave(file.path("results", "figures", paste0(file_name, ".png")), plot, width = 8, height = 6.5, dpi = 300)
 }
 
 create_and_save_volcano(uvm_vs_pan_cancer, "uvm_vs_pan_cancer_volcano")

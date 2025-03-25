@@ -56,19 +56,18 @@ plot_boxplot <- function(plot_df, stats = FALSE) {
       outlier.fill = NA
     ) +
     theme_classic() +
+    labs(title = "Gene Rank Comparison", x = "Gene", y = "Rank") +
     theme(
       axis.text.x = element_text(angle = 25, hjust = 0.5, vjust = 0.63, size = 12, face = "italic"),
       axis.text.y = element_text(size = 12),
       axis.title.x = element_text(size = 14),
       axis.title.y = element_text(size = 14),
-      title = element_text(size = 15, face = "bold", hjust = 0.5),
+      plot.title = element_text(size = 15, hjust = 0.5),
       legend.title = element_blank(),
       legend.text = element_text(size = 12),
-      legend.justification = c("right", "top"),
       panel.grid.major.y = element_line(),
-      axis.ticks = element_line(color = "black"),
+      axis.ticks = element_line(color = "black")
     ) +
-    labs(title = "Gene Rank Comparison", x = "Gene", y = "Rank") +
     scale_fill_manual(values = fill_colors)
 
   if (stats) {
@@ -88,6 +87,13 @@ plot_boxplot <- function(plot_df, stats = FALSE) {
       ) +
       scale_x_discrete(guide = guide_axis(angle = 0))
   } else {
-    p + theme(legend.justification = c("right", "top"))
+    p + theme(
+          legend.position = "right"   
+          # legend.position = c(1, 1.04),      
+          # legend.justification = c(1, 1),  
+          # legend.box.just = "right",         
+          # legend.direction = "horizontal",
+          # legend.box = "horizontal"     
+          )
   }
 }
