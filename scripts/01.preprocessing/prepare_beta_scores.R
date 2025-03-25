@@ -1,7 +1,7 @@
 library(dplyr)
 library(readr)
 library(vroom)
-
+library(tidyr)
 
 # Load depmap 22Q2 data 
 # https:/q/depmap.org/portal/data_page/?tab=allData&releasename=DepMap%20Public%2022Q2&filename=sample_info.csv
@@ -15,8 +15,11 @@ avana <- vroom("data/raw/avana.tsv")
 avana <- na.omit(avana)
 
 # Load UVM data
-# https://github.com/team113sanger/uveal_melanoma_CRISPR_downstream/blob/main/results/MAGeCK_gene_corrected_beta.tsv
-uvm_beta_scores <- read_tsv("data/raw/MAGeCK_gene_corrected_beta.tsv")
+# https://github.com/team113sanger/targeting_CDS1_CDS2_axis_pub_figures/tree/master/data/mageck_output.tsv
+uvm_beta_scores <- read_tsv("data/raw/mageck_output.tsv") |>
+  select(Gene, ModelName, Beta) |>
+  rename(genes = Gene) |>
+  pivot_wider(names_from = ModelName, values_from = Beta, values_fn = first) 
 
 # Divide avana data into pan-cancer group
 non_melanoma_lines <- anno |>
