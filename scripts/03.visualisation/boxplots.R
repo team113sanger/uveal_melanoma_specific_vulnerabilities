@@ -84,6 +84,7 @@ plot_boxplot <- function(plot_df, stats = FALSE) {
       theme(
         legend.position = "none",
         axis.text.x = element_text(size = 12, face = "plain"),
+        panel.background = element_rect(colour = "black", size=0.75),
       ) +
       scale_x_discrete(guide = guide_axis(angle = 0))
   } else {
