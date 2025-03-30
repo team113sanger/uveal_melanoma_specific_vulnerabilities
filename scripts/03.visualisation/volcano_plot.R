@@ -30,7 +30,7 @@ plot_volcano <- function(df) {
       min.segment.length = 0
     ) +
     labs(
-      x = expression("log"[2] ~ "(Fold change)"),
+      x = expression("log"[2] ~ "(Rank Fold Change)"),
       y = expression("log"[10] ~ "(1 / Padj)")
     ) +
     theme_classic() +
