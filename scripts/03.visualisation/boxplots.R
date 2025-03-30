@@ -65,7 +65,7 @@ plot_boxplot <- function(plot_df, stats = FALSE) {
       plot.title = element_text(size = 15, hjust = 0.5),
       legend.title = element_blank(),
       legend.text = element_text(size = 12),
-      panel.grid.major.y = element_line(),
+      #panel.grid.major.y = element_line(),
       axis.ticks = element_line(color = "black")
     ) +
     scale_fill_manual(values = fill_colors)
@@ -83,8 +83,9 @@ plot_boxplot <- function(plot_df, stats = FALSE) {
       ) +
       theme(
         legend.position = "none",
+        panel.grid.major.y = element_line(),
         axis.text.x = element_text(size = 12, face = "plain"),
-        panel.background = element_rect(colour = "black", size=0.75),
+        panel.background = element_rect(colour = "black", linewidth=0.75),
       ) +
       scale_x_discrete(guide = guide_axis(angle = 0))
   } else {
